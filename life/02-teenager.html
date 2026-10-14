@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2단계: 청소년기 - 예상 키 계산기 & 학습 D-Day</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-box { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; }
+        .calc-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; font-size: 1rem; }
+        .calc-btn:hover { background-color: #4338ca; }
+        .result-box { margin-top: 20px; padding: 20px; background-color: var(--primary-light); border-radius: 8px; display: none; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .guide-content { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <header style="padding: 40px 20px;">
+        <div class="container">
+            <h1>🎒 2단계: 청소년기</h1>
+            <p>성장기 건강 관리와 목표 달성을 위한 스마트 도구</p>
+        </div>
+    </header>
+    <main class="container" style="padding-top: 40px;">
+        <a href="../index.html" class="back-link">&larr; 홈으로 돌아가기</a>
+        
+        <section class="tool-box">
+            <h2>📏 자녀 예상 키 계산기 (유전적 요인)</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">부모님의 키를 바탕으로 계산하는 유전적 예상 키입니다. (오차 범위 ±5cm)</p>
+            <div class="form-group">
+                <label>아버지 키 (cm)</label>
+                <input type="number" id="fatherHeight" placeholder="예: 175">
+            </div>
+            <div class="form-group">
+                <label>어머니 키 (cm)</label>
+                <input type="number" id="motherHeight" placeholder="예: 160">
+            </div>
+            <div class="form-group">
+                <label>자녀 성별</label>
+                <select id="gender" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 1rem;">
+                    <option value="male">남아</option>
+                    <option value="female">여아</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="calculateHeight()">계산하기</button>
+            <div id="heightResult" class="result-box">
+                <h3>예상 결과</h3>
+                <p id="heightText"></p>
+            </div>
+        </section>
+
+        <section class="guide-content">
+            <h2>💡 성장기 청소년을 위한 건강 팁</h2>
+            <p>청소년기는 급격한 신체 변화와 함께 학업 스트레스가 증가하는 시기입니다. 예상 키는 유전적 요인을 바탕으로 하지만, 후천적인 노력(영양, 수면, 운동)으로 충분히 극복 가능합니다.</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>충분한 수면:</strong> 성장호르몬은 밤 10시에서 새벽 2시 사이 왕성하게 분비됩니다.</li>
+                <li><strong>균형 잡힌 영양:</strong> 칼슘뿐만 아니라 단백질과 비타민 D 섭취가 중요합니다.</li>
+                <li><strong>스트레칭:</strong> 성장판을 자극하는 줄넘기, 농구, 수영 등의 운동이 도움이 됩니다.</li>
+            </ul>
+        </section>
+    </main>
+    <script>
+        function calculateHeight() {
+            const f = parseFloat(document.getElementById('fatherHeight').value);
+            const m = parseFloat(document.getElementById('motherHeight').value);
+            const gender = document.getElementById('gender').value;
+            if(!f || !m) { alert('키를 입력해주세요!'); return; }
+            let result = (f + m) / 2;
+            if(gender === 'male') result += 6.5; else result -= 6.5;
+            document.getElementById('heightResult').style.display = 'block';
+            document.getElementById('heightText').innerHTML = `자녀의 유전적 예상 키는 약 <strong>${result.toFixed(1)}cm</strong> 입니다. <br><small>*이는 통계적인 수치이며 식습관과 운동에 따라 달라질 수 있습니다.</small>`;
+        }
+    </script>
+</body>
+</html>

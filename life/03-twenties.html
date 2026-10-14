@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3단계: 20대 청년기 - 알바 급여 & 주휴수당 계산기</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-box { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; }
+        .calc-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; font-size: 1rem; }
+        .calc-btn:hover { background-color: #4338ca; }
+        .result-box { margin-top: 20px; padding: 20px; background-color: var(--primary-light); border-radius: 8px; display: none; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .guide-content { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <header style="padding: 40px 20px;">
+        <div class="container">
+            <h1>🎓 3단계: 20대 청년기</h1>
+            <p>경제적 자립의 첫걸음, 알바 급여부터 꼼꼼하게 챙기세요</p>
+        </div>
+    </header>
+    <main class="container" style="padding-top: 40px;">
+        <a href="../index.html" class="back-link">&larr; 홈으로 돌아가기</a>
+        
+        <section class="tool-box">
+            <h2>💰 알바 급여 및 주휴수당 계산기</h2>
+            <div class="form-group">
+                <label>시급 (2024년 최저임금 9,860원)</label>
+                <input type="number" id="wage" value="9860">
+            </div>
+            <div class="form-group">
+                <label>일주일 총 근무 시간 (15시간 이상 시 주휴수당 발생)</label>
+                <input type="number" id="hours" placeholder="예: 20">
+            </div>
+            <button class="calc-btn" onclick="calculateWage()">계산하기</button>
+            <div id="wageResult" class="result-box">
+                <h3>예상 주급 결과</h3>
+                <p id="wageText"></p>
+            </div>
+        </section>
+
+        <section class="guide-content">
+            <h2>📢 꼭 알아야 할 알바 권리</h2>
+            <p>20대 청년들이 처음 사회 경험을 쌓는 아르바이트, 자신의 권리를 아는 것이 중요합니다.</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>최저임금 준수:</strong> 2024년 최저시급은 9,860원입니다.</li>
+                <li><strong>주휴수당:</strong> 주 15시간 이상 근무하고 소정근로일을 개근했다면 주휴수당을 받을 수 있습니다.</li>
+                <li><strong>근로계약서 작성:</strong> 시작 전 반드시 근로조건이 명시된 계약서를 작성해야 나중에 문제가 생겼을 때 보호받을 수 있습니다.</li>
+            </ul>
+        </section>
+    </main>
+    <script>
+        function calculateWage() {
+            const wage = parseFloat(document.getElementById('wage').value);
+            const hours = parseFloat(document.getElementById('hours').value);
+            if(!wage || !hours) { alert('값을 입력해주세요!'); return; }
+            
+            let basePay = wage * hours;
+            let weeklyAllowance = 0;
+            if(hours >= 15) {
+                // 주 40시간 한도 내에서 주휴수당 계산
+                const allowanceHours = Math.min(hours, 40) / 40 * 8;
+                weeklyAllowance = allowanceHours * wage;
+            }
+            
+            document.getElementById('wageResult').style.display = 'block';
+            document.getElementById('wageText').innerHTML = `
+                기본 주급: ${basePay.toLocaleString()}원<br>
+                주휴수당: ${Math.floor(weeklyAllowance).toLocaleString()}원<br>
+                <strong>예상 총 주급: ${Math.floor(basePay + weeklyAllowance).toLocaleString()}원</strong>
+            `;
+        }
+    </script>
+</body>
+</html>

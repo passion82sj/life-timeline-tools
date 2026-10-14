@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4단계: 30~40대 중장년기 - 연차 계산 & 부동산 이자</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-box { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; }
+        .calc-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; font-size: 1rem; }
+        .calc-btn:hover { background-color: #4338ca; }
+        .result-box { margin-top: 20px; padding: 20px; background-color: var(--primary-light); border-radius: 8px; display: none; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <header style="padding: 40px 20px;">
+        <div class="container">
+            <h1>💼 4단계: 30~40대 중장년기</h1>
+            <p>직장 생활과 자산 관리를 위한 필수 계산 도구</p>
+        </div>
+    </header>
+    <main class="container" style="padding-top: 40px;">
+        <a href="../index.html" class="back-link">&larr; 홈으로 돌아가기</a>
+        
+        <section class="tool-box">
+            <h2>📅 직장인 연차 계산기</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">입사일 기준으로 발생하는 법정 연차 개수를 확인하세요.</p>
+            <div class="form-group">
+                <label>입사일</label>
+                <input type="date" id="joinDate">
+            </div>
+            <button class="calc-btn" onclick="calculateLeave()">연차 계산하기</button>
+            <div id="leaveResult" class="result-box">
+                <h3>연차 계산 결과</h3>
+                <p id="leaveText"></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        function calculateLeave() {
+            const joinInput = document.getElementById('joinDate').value;
+            if(!joinInput) { alert('입사일을 입력해주세요!'); return; }
+            
+            const joinDate = new Date(joinInput);
+            const today = new Date();
+            const diffYears = today.getFullYear() - joinDate.getFullYear();
+            
+            let count = 15;
+            if (diffYears < 1) {
+                count = "1개월 만근 시 1일씩 발생 (최대 11일)";
+            } else {
+                const extra = Math.floor((diffYears - 1) / 2);
+                count = Math.min(25, 15 + extra);
+            }
+            
+            document.getElementById('leaveResult').style.display = 'block';
+            document.getElementById('leaveText').innerHTML = `당신의 현재 연차 발생 개수는 약 <strong>${count}${typeof count === 'number' ? '개' : ''}</strong> 입니다. <br><small>*회사의 회계연도 기준에 따라 다를 수 있습니다.</small>`;
+        }
+    </script>
+</body>
+</html>
