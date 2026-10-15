@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4단계: 30~40대 중장년기 - 연차 계산 & 부동산 이자</title>
+    <title>4단계: 30~40대 - 연차 및 대출 이자 계산기</title>
+    <meta name="description" content="직장인 연차 개수와 주택 담보 대출 이자를 간편하게 계산하세요. 3040 세대를 위한 필수 금융/노동 정보를 제공합니다.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="직장인 연차 & 대출 이자 계산기">
+    <meta property="og:description" content="내 연차는 몇 개일까? 대출 이자는 얼마일까? 지금 바로 확인하세요.">
+
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .tool-box { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; }
@@ -14,9 +21,23 @@
         .calc-btn:hover { background-color: #4338ca; }
         .result-box { margin-top: 20px; padding: 20px; background-color: var(--primary-light); border-radius: 8px; display: none; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .guide-content { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); line-height: 1.8; margin-top: 40px; }
     </style>
 </head>
 <body>
+    <!-- 네비게이션 바 -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">LifeTimeline</a>
+            <div class="nav-links">
+                <a href="01-baby-child.html">영유아</a>
+                <a href="02-teenager.html">청소년</a>
+                <a href="03-twenties.html">청년</a>
+                <a href="04-thirties-forties.html">중장년</a>
+                <a href="05-fifties-plus.html">노후</a>
+            </div>
+        </div>
+    </nav>
     <header style="padding: 40px 20px;">
         <div class="container">
             <h1>💼 4단계: 30~40대 중장년기</h1>
@@ -39,6 +60,47 @@
                 <p id="leaveText"></p>
             </div>
         </section>
+
+        <!-- 주택 담보 대출 이자 계산기 추가 -->
+        <section class="tool-box">
+            <h2>🏠 주택 담보 대출 이자 계산 (만기일시)</h2>
+            <div class="form-group">
+                <label>대출 금액 (만원)</label>
+                <input type="number" id="loanAmount" placeholder="예: 30000">
+            </div>
+            <div class="form-group">
+                <label>연 이자율 (%)</label>
+                <input type="number" id="interestRate" step="0.1" placeholder="예: 4.2">
+            </div>
+            <button class="calc-btn" onclick="calculateLoan()">이자 계산하기</button>
+            <div id="loanResult" class="result-box">
+                <h3>월 예상 이자</h3>
+                <p id="loanText"></p>
+            </div>
+        </section>
+
+        <section class="guide-content">
+            <h2>📊 3040 세대를 위한 생활 경제 팁</h2>
+            <p>사회생활이 가장 왕성한 30대와 40대는 노동법과 금융 지식이 곧 자산이 되는 시기입니다.</p>
+            
+            <h3 style="margin-top:20px; color:var(--primary-color);">1. 법정 연차 휴가 핵심 정리</h3>
+            <p>근로기준법에 따라 1년간 80% 이상 출근한 근로자에게는 15일의 유급휴가가 주어집니다. 이후 2년마다 1일씩 가산되어 최대 25일까지 늘어납니다. 미사용 연차에 대해서는 수당 청구권이 발생하므로 본인의 연차 개수를 정확히 아는 것이 중요합니다.</p>
+
+            <h3 style="margin-top:20px; color:var(--primary-color);">2. 현명한 대출 관리</h3>
+            <p>주택 담보 대출 이용 시 원리금 균등, 원금 균등, 만기 일시 상환 방식에 따라 매월 나가는 현금 흐름이 크게 달라집니다. 본인의 소득 수준과 향후 자금 계획에 맞춰 상환 방식을 선택해야 하며, 중도상환 수수료 여부도 반드시 체크해야 합니다.</p>
+
+            <div class="faq-section">
+                <h3>❓ 자주 묻는 질문 (FAQ)</h3>
+                <div class="faq-item">
+                    <h4>입사 1년 미만인데 연차를 쓸 수 있나요?</h4>
+                    <p>네, 1개월 개근 시 1일의 유급휴가가 발생하며, 1년 미만 기간 동안 최대 11일을 사용할 수 있습니다.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>대출 이자 계산 시 우대금리 적용은?</h4>
+                    <p>본 계산기는 입력하신 연 이자율을 기준으로 합니다. 은행별 우대금리(급여 이체, 카드 사용 등) 조건을 확인하여 최종 적용 금리를 입력해 보세요.</p>
+                </div>
+            </div>
+        </section>
     </main>
     <script>
         function calculateLeave() {
@@ -47,7 +109,13 @@
             
             const joinDate = new Date(joinInput);
             const today = new Date();
-            const diffYears = today.getFullYear() - joinDate.getFullYear();
+            
+            // 근속 연수 계산 (정교화)
+            let diffYears = today.getFullYear() - joinDate.getFullYear();
+            const m = today.getMonth() - joinDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < joinDate.getDate())) {
+                diffYears--;
+            }
             
             let count = 15;
             if (diffYears < 1) {
@@ -58,7 +126,16 @@
             }
             
             document.getElementById('leaveResult').style.display = 'block';
-            document.getElementById('leaveText').innerHTML = `당신의 현재 연차 발생 개수는 약 <strong>${count}${typeof count === 'number' ? '개' : ''}</strong> 입니다. <br><small>*회사의 회계연도 기준에 따라 다를 수 있습니다.</small>`;
+            document.getElementById('leaveText').innerHTML = `당신의 현재 연차 발생 개수는 약 <span class="result-highlight">${count}${typeof count === 'number' ? '개' : ''}</span> 입니다. <br><small>*입사 1년차 미만은 월 단위로 발생합니다.</small>`;
+        }
+
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) * 10000;
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100;
+            if(!amount || !rate) { alert('값을 입력해주세요!'); return; }
+            const monthlyInterest = (amount * rate) / 12;
+            document.getElementById('loanResult').style.display = 'block';
+            document.getElementById('loanText').innerHTML = `한 달에 약 <span class="result-highlight">${Math.floor(monthlyInterest).toLocaleString()}원</span>의 이자가 발생합니다. <br><small>*만기일시상환, 30일 기준 단순 계산 결과입니다.</small>`;
         }
     </script>
 </body>
