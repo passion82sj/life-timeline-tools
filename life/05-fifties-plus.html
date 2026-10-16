@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5단계: 50대 이후 - 기초대사량 & 건강 관리</title>
+    <title>5단계: 50대 이후 - 기초대사량 & 노후 건강 가이드</title>
+    <meta name="description" content="기초대사량 계산기를 통해 신체 상태를 점검하고, 활기찬 노후를 위한 식단 및 운동 팁을 확인하세요.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="노후 건강 관리 - 기초대사량 계산기">
+    <meta property="og:description" content="내 몸에 필요한 최소 에너지는 얼마일까? 기초대사량 계산으로 건강한 노후를 준비하세요.">
+
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .tool-box { background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; }
@@ -18,6 +25,19 @@
     </style>
 </head>
 <body>
+    <!-- 네비게이션 바 -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">LifeTimeline</a>
+            <div class="nav-links">
+                <a href="01-baby-child.html">영유아</a>
+                <a href="02-teenager.html">청소년</a>
+                <a href="03-twenties.html">청년</a>
+                <a href="04-thirties-forties.html">중장년</a>
+                <a href="05-fifties-plus.html">노후</a>
+            </div>
+        </div>
+    </nav>
     <header style="padding: 40px 20px; background: linear-gradient(135deg, #059669 0%, #064e3b 100%);">
         <div class="container">
             <h1>☕ 5단계: 50대 이후 노후 준비</h1>
@@ -28,8 +48,8 @@
         <a href="../index.html" class="back-link">&larr; 홈으로 돌아가기</a>
         
         <section class="tool-box">
-            <h2>🏃 기초대사량(BMR) 계산기</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">기초대사량은 생명 유지에 필요한 최소한의 에너지입니다. 나이가 들수록 근육량이 줄어 대사량이 낮아지므로 꾸준한 체크가 필요합니다.</p>
+            <h2>🏃 기초대사량(BMR) 및 일일 권장 칼로리</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">나이가 들수록 근육량이 줄어 대사량이 낮아집니다. 활동량을 고려한 하루 권장 칼로리를 확인해 보세요.</p>
             <div class="form-group">
                 <label>성별</label>
                 <select id="genderBmr">
@@ -40,6 +60,15 @@
             <div class="form-group"><label>현재 체중 (kg)</label><input type="number" id="weightBmr" placeholder="예: 70"></div>
             <div class="form-group"><label>현재 키 (cm)</label><input type="number" id="heightBmr" placeholder="예: 170"></div>
             <div class="form-group"><label>나이 (만 나이)</label><input type="number" id="ageBmr" placeholder="예: 55"></div>
+            <div class="form-group">
+                <label>활동량</label>
+                <select id="activityLevel">
+                    <option value="1.2">거의 운동 안 함</option>
+                    <option value="1.375">가벼운 운동 (주 1~3일)</option>
+                    <option value="1.55">보통 수준 운동 (주 3~5일)</option>
+                    <option value="1.725">적극적인 운동 (주 6~7일)</option>
+                </select>
+            </div>
             <button class="calc-btn" onclick="calculateBMR()">계산하기</button>
             <div id="bmrResult" class="result-box">
                 <h3>계산 결과</h3>
@@ -55,6 +84,18 @@
                 <li><strong>정기 검진:</strong> 국가에서 제공하는 생애 전환기 검진을 놓치지 마세요.</li>
                 <li><strong>충분한 수분:</strong> 갈증 감각이 둔해질 수 있으므로 의식적으로 물을 마시는 습관이 중요합니다.</li>
             </ul>
+
+            <div class="faq-section">
+                <h3>❓ 자주 묻는 질문 (FAQ)</h3>
+                <div class="faq-item">
+                    <h4>기초대사량보다 적게 먹으면 살이 빠지나요?</h4>
+                    <p>단기적으로는 빠질 수 있지만, 몸이 기아 상태로 인식해 대사량을 더 낮추게 됩니다. 기초대사량만큼은 섭취하되 활동량을 늘리는 것이 건강한 다이어트입니다.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>국민연금은 언제부터 받을 수 있나요?</h4>
+                    <p>출생 연도에 따라 다르지만, 보통 만 63세~65세부터 수령이 가능합니다. 정확한 수령액과 시기는 '내 곁에 국민연금' 앱이나 누리집에서 확인할 수 있습니다.</p>
+                </div>
+            </div>
         </section>
     </main>
     <script>
@@ -63,14 +104,21 @@
             const h = parseFloat(document.getElementById('heightBmr').value);
             const a = parseFloat(document.getElementById('ageBmr').value);
             const g = document.getElementById('genderBmr').value;
+            const activity = parseFloat(document.getElementById('activityLevel').value);
+            
             if(!w || !h || !a) { alert('모든 항목을 입력해주세요.'); return; }
             
             // 미플린-세인트 지어(Mifflin-St Jeor) 공식
             let bmr = (10 * w) + (6.25 * h) - (5 * a);
             if(g === 'male') bmr += 5; else bmr -= 161;
             
+            const tdee = bmr * activity;
+            
             document.getElementById('bmrResult').style.display = 'block';
-            document.getElementById('bmrText').innerHTML = `당신의 하루 기초대사량은 약 <strong>${Math.floor(bmr).toLocaleString()} kcal</strong> 입니다. <br><small>*활동량에 따라 실제 필요 에너지는 더 높을 수 있습니다.</small>`;
+            document.getElementById('bmrText').innerHTML = `
+                당신의 하루 기초대사량은 약 <strong>${Math.floor(bmr).toLocaleString()} kcal</strong> 입니다. <br>
+                활동량을 고려한 하루 권장 칼로리는 <span class="result-highlight">${Math.floor(tdee).toLocaleString()} kcal</span> 입니다.
+            `;
         }
     </script>
 </body>
